@@ -1,0 +1,55 @@
+// ========== NEW INTERFACE ==========
+public interface TaxStrategy {
+    int calculateTax(OrderItem item);
+}
+
+// ========== CONCRETE STRATEGIES ==========
+public class FoodTaxStrategy implements TaxStrategy {
+    private static final double FOOD_TAX_RATE = 0.05;
+    @Override
+    public int calculateTax(OrderItem item) {
+        return (int) (item.getPrice() * item.getQuantity() * FOOD_TAX_RATE);
+    }
+}
+
+public class BeverageTaxStrategy implements TaxStrategy {
+    private static final double BEV_TAX_RATE = 0.18;
+    @Override
+    public int calculateTax(OrderItem item) {
+        return (int) (item.getPrice() * item.getQuantity() * BEV_TAX_RATE);
+    }
+}
+
+public class ServiceChargeStrategy implements TaxStrategy {
+    private static final double SERVICE_CHARGE = 0.10;
+    @Override
+    public int calculateTax(OrderItem item) {
+        return (int) (item.getPrice() * item.getQuantity() * SERVICE_CHARGE);
+    }
+}
+
+// ========== TAX CALCULATOR (uses strategies) ==========
+public class TaxCalculator {
+    private Map<String, TaxStrategy> strategyMap = new HashMap<>();
+
+    public void registerStrategy(String itemType, TaxStrategy strategy) {
+        strategyMap.put(itemType, strategy);
+    }
+
+    public int calculateTotalTax(OrderBill order) {
+        int totalTax = 0;
+        for (OrderItem item : order.getItems()) {
+            TaxStrategy strategy = strategyMap.get(item.getType());
+            if (strategy != null) {
+                totalTax += strategy.calculateTax(item);
+            }
+        }
+        return totalTax;
+    }
+}
+
+// ========== REGISTRATION (in Application class) ==========
+TaxCalculator taxCalculator = new TaxCalculator();
+taxCalculator.registerStrategy("Food", new FoodTaxStrategy());
+taxCalculator.registerStrategy("Beverage", new BeverageTaxStrategy());
+taxCalculator.registerStrategy("All", new ServiceChargeStrategy());

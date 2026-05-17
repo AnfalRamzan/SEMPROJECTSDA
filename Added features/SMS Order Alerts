@@ -1,0 +1,51 @@
+// ========== NEW INTERFACE ==========
+public interface OrderStatusObserver {
+    void onOrderStatusChanged(Order order, int oldStatus, int newStatus);
+}
+
+// ========== NEW CLASS – SMS Observer ==========
+public class SmsOrderObserver implements OrderStatusObserver {
+    private SmsService smsService;
+
+    public SmsOrderObserver(SmsService smsService) {
+        this.smsService = smsService;
+    }
+
+    @Override
+    public void onOrderStatusChanged(Order order, int oldStatus, int newStatus) {
+        String customerPhone = order.getCustomerPhone();
+        if (customerPhone == null || customerPhone.isEmpty()) return;
+
+        String message = getMessageForStatus(newStatus);
+        if (message != null) {
+            smsService.send(customerPhone, message);
+        }
+    }
+
+    private String getMessageForStatus(int status) {
+        switch (status) {
+            case 2: return "Your order is ready for pickup!";
+            case 3: return "Your order has been served. Enjoy your meal!";
+            case 4: return "Payment confirmed. Thank you!";
+            default: return null;
+        }
+    }
+}
+
+// ========== SMS SERVICE INTERFACE ==========
+public interface SmsService {
+    void send(String phoneNumber, String message);
+}
+
+public class TwilioSmsService implements SmsService {
+    @Override
+    public void send(String phoneNumber, String message) {
+        System.out.println("SMS to " + phoneNumber + ": " + message);
+    }
+}
+
+// ========== EVENT BUS ==========
+// (Assuming OrderEventBus already exists or is created separately)
+
+// ========== REGISTRATION (in Application class) ==========
+OrderEventBus.getInstance().register(new SmsOrderObserver(new TwilioSmsService()));

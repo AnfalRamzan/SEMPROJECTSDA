@@ -1,0 +1,82 @@
+// ========== NEW INTERFACE ==========
+public interface DiscountStrategy {
+    int applyDiscount(OrderBill order);
+    String getDescription();
+}
+
+// ========== NEW CLASS – Loyalty Points Discount ==========
+public class LoyaltyPointsDiscount implements DiscountStrategy {
+    private static final int POINTS_PER_RUPEE = 1;
+    private static final int REDEMPTION_RATE = 100;
+    private LoyaltyPointsRepository pointsRepo;
+
+    public LoyaltyPointsDiscount(LoyaltyPointsRepository repo) {
+        this.pointsRepo = repo;
+    }
+
+    @Override
+    public int applyDiscount(OrderBill order) {
+        String customerId = order.getCustomerId();
+        int availablePoints = pointsRepo.getPoints(customerId);
+        int maxDiscount = availablePoints / REDEMPTION_RATE;
+        int discount = Math.min(maxDiscount, order.getTotal());
+        pointsRepo.deductPoints(customerId, discount * REDEMPTION_RATE);
+        return discount;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Loyalty Points Redemption";
+    }
+}
+
+// ========== NEW REPOSITORY FOR POINTS ==========
+public interface LoyaltyPointsRepository {
+    int getPoints(String customerId);
+    void addPoints(String customerId, int points);
+    void deductPoints(String customerId, int points);
+}
+
+public class FirebaseLoyaltyPointsRepository implements LoyaltyPointsRepository {
+    private DatabaseReference ref = FirebaseDatabase.getInstance().getReference("LoyaltyPoints");
+
+    @Override
+    public int getPoints(String customerId) {
+        return 0;
+    }
+
+    @Override
+    public void addPoints(String customerId, int points) {
+        ref.child(customerId).child("points").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int current = snapshot.exists() ? snapshot.getValue(Integer.class) : 0;
+                ref.child(customerId).child("points").setValue(current + points);
+            }
+            @Override public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
+
+    @Override
+    public void deductPoints(String customerId, int points) {
+        addPoints(customerId, -points);
+    }
+}
+
+// ========== DISCOUNT ENGINE ==========
+public class DiscountEngine {
+    private static List<DiscountStrategy> strategies = new ArrayList<>();
+    public static void registerStrategy(DiscountStrategy strategy) {
+        strategies.add(strategy);
+    }
+    public static int applyBestDiscount(OrderBill order) {
+        int best = 0;
+        for (DiscountStrategy s : strategies) {
+            best = Math.max(best, s.applyDiscount(order));
+        }
+        return best;
+    }
+}
+
+// ========== REGISTRATION (in Application class) ==========
+DiscountEngine.registerStrategy(new LoyaltyPointsDiscount(new FirebaseLoyaltyPointsRepository()));
