@@ -1,0 +1,23 @@
+public interface EmployeeRole {
+    void openDashboard(Context context);
+}
+public class HallManagerRole implements EmployeeRole {
+
+    @Override
+    public void openDashboard(Context context) {
+        context.startActivity(
+            new Intent(context, HallDashboard.class)
+        );
+    }
+}
+public class ChefRole implements EmployeeRole {
+
+    @Override
+    public void openDashboard(Context context) {
+        context.startActivity(
+            new Intent(context, KitchenDashboard.class)
+        );
+    }
+}
+EmployeeRole role = RoleFactory.getRole(employee.getType());
+role.openDashboard(this);

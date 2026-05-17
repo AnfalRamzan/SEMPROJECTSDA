@@ -1,0 +1,23 @@
+public class LoginActivity extends AppCompatActivity {
+
+    private AuthService authService;
+    private NavigationService navigationService;
+
+    void login() {
+
+        authService.login();
+        navigationService.openDashboard();
+    }
+}
+public class AuthService {
+
+    public void login() {
+        // authentication logic
+    }
+}
+public class NavigationService {
+
+    public void openDashboard() {
+        // navigation logic
+    }
+}

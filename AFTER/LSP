@@ -1,0 +1,17 @@
+interface OrderStatus {
+    void updateStatus();
+}
+class ActiveOrder implements OrderStatus {
+
+    @Override
+    public void updateStatus() {
+        System.out.println("Order Updated");
+    }
+}
+class CancelledOrder implements OrderStatus {
+
+    @Override
+    public void updateStatus() {
+        System.out.println("Cancelled orders cannot update");
+    }
+}

@@ -1,0 +1,18 @@
+public class TableAdapter
+        extends RecyclerView.Adapter<TableViewHolder> {
+
+    @Override
+    public void onBindViewHolder(
+            TableViewHolder holder,
+            int position) {
+
+        bindTable(holder, position);
+    }
+
+    private void bindTable(
+            TableViewHolder holder,
+            int position) {
+
+        // UI binding only
+    }
+}

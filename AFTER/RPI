@@ -1,0 +1,16 @@
+public interface OrderRepository {
+
+    void saveOrder(Order order);
+}
+public class FirebaseOrderRepository
+        implements OrderRepository {
+
+    @Override
+    public void saveOrder(Order order) {
+
+        FirebaseDatabase.getInstance()
+                .getReference("orders")
+                .push()
+                .setValue(order);
+    }
+}
