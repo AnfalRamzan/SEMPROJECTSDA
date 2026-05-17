@@ -1,0 +1,4 @@
+FirebaseDatabase database = FirebaseDatabase.getInstance();
+DatabaseReference ref = database.getReference("orders");
+
+ref.child(orderId).setValue(order);

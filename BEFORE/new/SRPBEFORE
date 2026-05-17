@@ -1,0 +1,9 @@
+public class LoginActivity extends AppCompatActivity {
+
+    void login() {
+        validateInput();
+        authenticateUser();
+        checkRole();
+        openDashboard();
+    }
+}

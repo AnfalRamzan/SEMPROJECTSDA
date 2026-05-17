@@ -1,0 +1,11 @@
+public class MainActivity
+        extends AppCompatActivity {
+
+    protected void onCreate(Bundle savedInstanceState) {
+
+        fetchOrders();
+        updateFirebase();
+        validateInput();
+        updateUI();
+    }
+}
