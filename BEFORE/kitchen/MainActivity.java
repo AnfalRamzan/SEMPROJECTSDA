@@ -98,6 +98,10 @@ public class MainActivity extends AppCompatActivity
 
         return 0;
     }
+    //Rigidity hardcoded in many classes.
+    public static int WAITING = 0;
+public static int COOKING = 1;
+public static int READY = 2;
 
     public static String getDishType(String dish){
         for(DishDb dis:dishes){
@@ -523,6 +527,11 @@ public class MainActivity extends AppCompatActivity
 
         return null;
     }
+    //manipulates Firebase database
+    mDatabase.getReference("OrderDetails")
+.child(dish.getNodeId())
+.child("status")
+.setValue(newStatus);
 
     public static void updateOrderStatusCooking(String orderId){
         for(OrderDb order:orders){
@@ -559,4 +568,32 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+}
+
+
+
+
+
+private void initRecyclerView()
+{
+    // Creating Layout Manager(DUPLICATE)
+    LinearLayoutManager layoutManager =
+        new LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false);
+
+    // Finding RecyclerView
+    recyclerView = findViewById(R.id.recyclerView);
+
+    // Setting Layout Manager
+    recyclerView.setLayoutManager(layoutManager);
+
+    // Creating Adapter
+    adapter = new RecyclerViewAdapterCook(
+        this,
+        mChefs);
+
+    // Setting Adapter
+    recyclerView.setAdapter(adapter);
 }

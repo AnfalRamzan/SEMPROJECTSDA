@@ -128,6 +128,18 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
         }
-    }
+    }//
 
+}
+//Shotgun Surgery
+LoginActivity
+if(type.equals("Chef")){
+    // Open Chef Screen
+}
+else if(type.equals("Hall Manager")){
+    // Open Hall Manager Screen
+}
+//Change Needed
+else if(type.equals("Delivery Boy")){
+    // Open Delivery Screen
 }

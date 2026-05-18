@@ -209,7 +209,7 @@ public class AdminPanelActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-
+//Date Checking
     public void checkdate() {
         firebaseDatabase = FirebaseDatabase.getInstance(); //FIREBASE DATABASE KA OBJECT GET KIA
 
@@ -247,7 +247,7 @@ public class AdminPanelActivity extends AppCompatActivity {
             }
         });
     }
-
+//Firebase Database Handling
     public void checkdb() {
         firebaseDatabase = FirebaseDatabase.getInstance(); //FIREBASE DATABASE KA OBJECT GET KIA
 
@@ -315,7 +315,7 @@ public class AdminPanelActivity extends AppCompatActivity {
             }
         });
     }
-
+//Inventory Management
     public void removenotif() {
         for (int i = 0; i < notf.size(); i++) {
             for (int j = 0; j < itm.size(); j++) {

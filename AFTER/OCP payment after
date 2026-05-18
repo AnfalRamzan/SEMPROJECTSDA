@@ -1,0 +1,56 @@
+public enum PaymentStatus {
+
+    PAID {
+        @Override
+        public void handle(PaymentContext ctx) {
+            ctx.generateReceipt();
+        }
+    },
+
+    UNPAID {
+        @Override
+        public void handle(PaymentContext ctx) {
+            ctx.showPaymentReminder();
+        }
+    },
+
+    CANCELLED {
+        @Override
+        public void handle(PaymentContext ctx) {
+            ctx.refundAmount();
+        }
+    };
+
+    public abstract void handle(PaymentContext ctx);
+}
+
+
+// Context Class
+class PaymentContext {
+
+    public void generateReceipt() {
+        System.out.println("Receipt Generated");
+    }
+
+    public void showPaymentReminder() {
+        System.out.println("Payment Reminder Sent");
+    }
+
+    public void refundAmount() {
+        System.out.println("Refund Processed");
+    }
+}
+
+
+// Main Class
+public class ConfirmPayment {
+
+    public static void main(String[] args) {
+
+        PaymentContext context = new PaymentContext();
+
+        PaymentStatus status = PaymentStatus.PAID;
+
+        status.handle(context);
+    }
+}

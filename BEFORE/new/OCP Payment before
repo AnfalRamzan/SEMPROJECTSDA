@@ -1,0 +1,39 @@
+public class ConfirmPayment {
+
+    public void handlePayment(String status) {
+
+        if(status.equals("PAID")) {
+
+            generateReceipt();
+            updateDatabase();
+
+        } 
+        else if(status.equals("UNPAID")) {
+
+            showPaymentReminder();
+
+        } 
+        else if(status.equals("CANCELLED")) {
+
+            refundAmount();
+
+        }
+
+    }
+
+    private void generateReceipt() {
+        System.out.println("Receipt Generated");
+    }
+
+    private void updateDatabase() {
+        System.out.println("Database Updated");
+    }
+
+    private void showPaymentReminder() {
+        System.out.println("Payment Reminder Sent");
+    }
+
+    private void refundAmount() {
+        System.out.println("Refund Processed");
+    }
+}

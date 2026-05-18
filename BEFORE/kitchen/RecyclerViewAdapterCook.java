@@ -46,23 +46,14 @@ public class RecyclerViewAdapterCook extends RecyclerView.Adapter<RecyclerViewAd
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         final RecyclerView recyclerView = holder.mRecyclerView;
         recyclerView.setLayoutManager(layoutManager);
+//adapter depends heavily on:
+        RecyclerViewAdapterOrdersOfCook adapter2 =
+    new RecyclerViewAdapterOrdersOfCook(
+        mContext,
+        mChefs.get(position).getChefQueue(),
+        position);
 
-        RecyclerViewAdapterOrdersOfCook adapter2 = new RecyclerViewAdapterOrdersOfCook(mContext, mChefs.get(position).getChefQueue(),position);
-        adapters.add(adapter2);
-        recyclerView.setAdapter(adapters.get(adapters.size()-1));
-
-        if(!mChefs.get(position).isPresent()){
-            holder.name.setVisibility(View.GONE);
-            holder.imageView.setVisibility(View.GONE);
-            holder.mRecyclerView.setVisibility(View.GONE);
-        }
-        else{
-            holder.name.setVisibility(View.VISIBLE);
-            holder.imageView.setVisibility(View.VISIBLE);
-            holder.mRecyclerView.setVisibility(View.VISIBLE);
-        }
-
-    }
+recyclerView.setAdapter(adapter2);
 
     @Override
     public int getItemCount()
@@ -84,4 +75,74 @@ public class RecyclerViewAdapterCook extends RecyclerView.Adapter<RecyclerViewAd
             mRecyclerView=itemView.findViewById(R.id.recyclerview5);
         }
     }
+}
+
+@Override
+public void onBindViewHolder(
+    final ViewHolder holder,
+    final int position)
+{
+    // Setting chef name
+    holder.name.setText(
+        mChefs.get(position).getName());
+
+    // Creating Layout Manager(DUPLICATE)
+    LinearLayoutManager layoutManager =
+        new LinearLayoutManager(
+            mContext,
+            LinearLayoutManager.VERTICAL,
+            false);
+
+    // Finding RecyclerView
+    final RecyclerView recyclerView =
+        holder.mRecyclerView;
+
+    // Setting Layout Manager
+    recyclerView.setLayoutManager(layoutManager);
+
+    // Creating Adapter
+    RecyclerViewAdapterOrdersOfCook adapter2 =
+        new RecyclerViewAdapterOrdersOfCook(
+            mContext,
+            mChefs.get(position).getChefQueue(),
+            position);
+
+    // Adding Adapter
+    adapters.add(adapter2);
+
+    // Setting Adapter
+    recyclerView.setAdapter(
+        adapters.get(adapters.size()-1));
+
+    // Visibility Handling
+    if(!mChefs.get(position).isPresent()){
+
+        holder.name.setVisibility(View.GONE);
+
+        holder.imageView.setVisibility(View.GONE);
+
+        holder.mRecyclerView.setVisibility(
+            View.GONE);
+
+    }
+    else{
+
+        holder.name.setVisibility(View.VISIBLE);
+
+        holder.imageView.setVisibility(View.VISIBLE);
+
+        holder.mRecyclerView.setVisibility(
+            View.VISIBLE);
+    }
+}
+//Adapter Classes
+if(employee.getType().equals("Chef")){
+    // Chef UI
+}
+// Status Check in Adapter chnging data
+if(mData.get(position).getStatus()
+        == MainActivity.WAITING)
+{
+    holder.button.setVisibility(
+            View.VISIBLE);
 }
